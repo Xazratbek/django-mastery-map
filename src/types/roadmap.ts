@@ -26,6 +26,26 @@ export interface Term {
   definition: string;
 }
 
+export interface LessonCodeSample {
+  title: string;
+  language: string;
+  code: string;
+}
+
+export interface LessonSection {
+  title: string;
+  body?: string[];
+  steps?: string[];
+  codeSamples?: LessonCodeSample[];
+}
+
+export interface LessonContent {
+  summary: string;
+  goals: string[];
+  sections: LessonSection[];
+  tips?: string[];
+}
+
 export interface StageData {
   id: string;
   dayNumber: number;
@@ -53,6 +73,7 @@ export interface StageData {
   commonMistakes: string[];
   ifStuck: string;
   resourcesPlaceholder: string[];
+  lesson?: LessonContent;
   coordinates: { x: number; y: number };
 }
 

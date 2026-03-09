@@ -93,6 +93,83 @@ export const rawDjangoDays: Partial<StageData>[] = [
     readinessCriteria: ['.env ni o\'zgartirganda settings o\'zgara olishi (runserver orqali tekshirish).'],
     commonMistakes: ['.env faylini github-ga push qilib yuborish!!!'],
     ifStuck: 'environ load_dotenv ishlatilishiga e\'tibor bering.',
+    lesson: {
+      summary: "Bugun settings.py ni environment orqali boshqarishni to'liq sozlaysiz: SECRET_KEY, DEBUG va ALLOWED_HOSTS. Natijada maxfiy ma'lumotlar koddan ajraladi va prod/dev rejimi aniq bo'ladi.",
+      goals: [
+        "SECRET_KEY va DEBUG ni .env orqali boshqarish",
+        "ALLOWED_HOSTS ni env listga aylantirish",
+        ".env faylini gitdan yashirish va tekshirish"
+      ],
+      sections: [
+        {
+          title: "1-qadam: django-environ o'rnatish",
+          body: [
+            "Oddiy settings ichida env o'qish uchun django-environ eng qulay variant.",
+            "Virtual muhit faolligini tekshirib keyin o'rnating."
+          ],
+          codeSamples: [
+            { title: "Kutubxona o'rnatish", language: 'bash', code: 'pip install django-environ' }
+          ]
+        },
+        {
+          title: "2-qadam: .env faylini yaratish",
+          body: [
+            "Loyiha rootida (manage.py turgan papkada) .env oching.",
+            "Kalitlar oddiy KEY=VALUE ko'rinishida yoziladi."
+          ],
+          codeSamples: [
+            { title: ".env namunasi", language: 'env', code: "DEBUG=True\nSECRET_KEY=django-insecure-change-me\nALLOWED_HOSTS=localhost,127.0.0.1" }
+          ]
+        },
+        {
+          title: "3-qadam: settings.py da env o'qish",
+          body: [
+            "settings.py tepasida env obyektini yarating va .env faylni o'qing.",
+            "Keyin SECRET_KEY, DEBUG, ALLOWED_HOSTS ni env orqali oling."
+          ],
+          codeSamples: [
+            {
+              title: 'settings.py',
+              language: 'python',
+              code: "from pathlib import Path\nimport environ\n\nBASE_DIR = Path(__file__).resolve().parent.parent\n\nenv = environ.Env(\n    DEBUG=(bool, False)\n)\nenviron.Env.read_env(BASE_DIR / '.env')\n\nSECRET_KEY = env('SECRET_KEY')\nDEBUG = env('DEBUG')\nALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])"
+            }
+          ]
+        },
+        {
+          title: "4-qadam: SECRET_KEY generatsiya qilish",
+          body: [
+            "Djangoning built-in utili orqali xavfsiz kalit generatsiya qiling.",
+            "Chiqqan kalitni .env ga joylashtiring va hech qachon gitga qo'shmang."
+          ],
+          codeSamples: [
+            {
+              title: 'Secret key yaratish',
+              language: 'bash',
+              code: 'python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"'
+            }
+          ]
+        },
+        {
+          title: "5-qadam: .gitignore va tekshirish",
+          body: [
+            ".env faylni gitdan yashiring, keyin DEBUG ni o'zgartirib serverni tekshiring."
+          ],
+          steps: [
+            ".gitignore ichiga .env yozing.",
+            ".env da DEBUG=True qilib runserver ishga tushiring.",
+            "DEBUG=False qilib qayta ishga tushiring: error sahifalari chiqqanini ko'rasiz."
+          ],
+          codeSamples: [
+            { title: '.gitignore', language: 'text', code: '.env\n.env.*' }
+          ]
+        }
+      ],
+      tips: [
+        "Productionda DEBUG=False bo'lishi shart.",
+        "Har muhit (local, staging, prod) uchun alohida SECRET_KEY ishlating.",
+        "ALLOWED_HOSTS ni domenlar bilan to'ldirib boring."
+      ]
+    },
     terms: [
       { term: 'Environment variable (.env)', definition: 'Dasturdan tashqaridagi operatsion sistemadagi yoki bash dagi vaqtinchalik o\'zgaruvchilar. Shu orqali maxfiy valuelar yashiriladi.' },
       { term: 'SECRET_KEY', definition: 'Django shifrlashdagi eng asosiy hashing kaliti. U ochiq qolsa session / db xavf ostida qoladi.' }
@@ -355,6 +432,7 @@ export const processRawData = (rawData: Partial<StageData>[]): StageData[] => {
       commonMistakes: data.commonMistakes || ['Ignoring basic Python concepts'],
       ifStuck: data.ifStuck || 'Review Django documentation.',
       resourcesPlaceholder: ['Django Official Docs', 'DRF Official Docs'],
+      lesson: data.lesson,
       coordinates: data.coordinates || coords,
     } as StageData;
   });

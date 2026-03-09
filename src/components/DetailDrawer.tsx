@@ -2,14 +2,19 @@
 
 import { useProgressStore } from '@/store/progressStore';
 import { roadmapData } from '@/data/roadmapData';
-import { X, CheckCircle2, Lock, ListTodo, GraduationCap, Unlock, Clock, AlertTriangle, ShieldAlert, Crosshair } from 'lucide-react';
+import { X, CheckCircle2, Lock, ListTodo, GraduationCap, Unlock, AlertTriangle, ShieldAlert, Crosshair } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function DetailDrawer() {
   const { selectedStageId, setSelectedStageId, isCompleted, isUnlocked, markCompleted, markUnlocked } = useProgressStore();
   const [focusPlan, setFocusPlan] = useState<'ideal' | 'minimum'>('ideal');
+  const [showLesson, setShowLesson] = useState(false);
+
+  useEffect(() => {
+    setShowLesson(false);
+  }, [selectedStageId]);
 
   if (!selectedStageId) return null;
 
@@ -99,6 +104,118 @@ export function DetailDrawer() {
               <span className="text-sm font-medium text-indigo-300 leading-snug">{stage.whyItMatters}</span>
             </div>
           </div>
+
+          <div className="bg-navy-800/80 p-4 rounded-2xl border border-white/5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <span className="text-xs text-slate-500 font-bold uppercase tracking-widest block mb-1">To'liq dars</span>
+                <p className="text-sm text-slate-300">
+                  {stage.lesson
+                    ? "Mavzu bo'yicha batafsil yo'l-yo'riq va kod namunalarini oching."
+                    : "Bu mavzu uchun batafsil dars kontenti hali yozilmoqda."}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowLesson((prev) => !prev)}
+                className={cn(
+                  "px-4 py-2 text-xs font-black uppercase tracking-widest rounded-lg border transition-all",
+                  showLesson
+                    ? "bg-brand-500/20 text-brand-200 border-brand-500/30"
+                    : "bg-white/5 text-slate-200 border-white/10 hover:border-brand-500/30"
+                )}
+              >
+                {showLesson ? "Darsni yopish" : "Darsga o'tish"}
+              </button>
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {showLesson && (
+              <motion.div
+                key="lesson"
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                className="space-y-4"
+              >
+                {stage.lesson ? (
+                  <>
+                    <div className="bg-black/20 border border-white/10 rounded-2xl p-4">
+                      <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-3">
+                        <ListTodo className="w-4 h-4 text-brand-400" /> To'liq dars
+                      </h3>
+                      <p className="text-sm text-slate-300 leading-relaxed">{stage.lesson.summary}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-3">Nimani o'rganasiz</h4>
+                      <ul className="space-y-2">
+                        {stage.lesson.goals.map((goal, idx) => (
+                          <li key={idx} className="flex gap-2 text-sm text-slate-300 items-start">
+                            <span className="mt-2 w-1.5 h-1.5 rounded-full bg-brand-400 shrink-0" />
+                            <span>{goal}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="space-y-4">
+                      {stage.lesson.sections.map((section, idx) => (
+                        <div key={idx} className="bg-navy-900/50 border border-white/10 rounded-2xl p-4 space-y-3">
+                          <h4 className="text-sm font-black text-white">{section.title}</h4>
+                          {section.body?.map((paragraph, pIdx) => (
+                            <p key={pIdx} className="text-sm text-slate-300 leading-relaxed">
+                              {paragraph}
+                            </p>
+                          ))}
+                          {section.steps && section.steps.length > 0 && (
+                            <ol className="space-y-2 list-decimal list-inside text-sm text-slate-300">
+                              {section.steps.map((step, sIdx) => (
+                                <li key={sIdx}>{step}</li>
+                              ))}
+                            </ol>
+                          )}
+                          {section.codeSamples && section.codeSamples.length > 0 && (
+                            <div className="space-y-3">
+                              {section.codeSamples.map((sample, sIdx) => (
+                                <div key={sIdx} className="border border-white/10 rounded-xl overflow-hidden bg-black/40">
+                                  <div className="flex items-center justify-between px-3 py-2 bg-white/5 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
+                                    <span>{sample.title}</span>
+                                    <span>{sample.language}</span>
+                                  </div>
+                                  <pre className="text-xs text-slate-200 font-mono p-3 overflow-x-auto whitespace-pre">
+                                    {sample.code}
+                                  </pre>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {stage.lesson.tips && stage.lesson.tips.length > 0 && (
+                      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4">
+                        <h4 className="text-xs font-black text-amber-400 uppercase tracking-widest mb-3">Praktik maslahatlar</h4>
+                        <ul className="space-y-2 text-sm text-amber-200">
+                          {stage.lesson.tips.map((tip, tIdx) => (
+                            <li key={tIdx} className="flex gap-2 items-start">
+                              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                              <span>{tip}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-slate-400">
+                    Bu mavzu uchun to'liq dars kontenti hali yozilmagan.
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Productivity Filter: Ideal vs Minimum */}
           <div className="mt-4 border border-white/10 rounded-2xl bg-black/20 overflow-hidden">
