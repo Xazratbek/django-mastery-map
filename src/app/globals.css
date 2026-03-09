@@ -20,40 +20,50 @@
 
 @layer base {
   :root {
-    --background: #0a0f1d;
-    --foreground: #f8fafc;
-    --glow-violet: rgba(139, 92, 246, 0.4);
-    --glow-cyan: rgba(6, 182, 212, 0.4);
+    --background: #f7f2e8;
+    --foreground: #1c1a16;
+    --bg: #f7f2e8;
+    --fg: #1c1a16;
+    --muted: #6f665c;
+    --accent: #0f766e;
+    --danger: #b91c1c;
+    --border: rgba(28, 26, 22, 0.12);
+    --surface: #fffaf2;
+    --glow-violet: rgba(39, 56, 96, 0.18);
+    --glow-cyan: rgba(18, 116, 128, 0.15);
   }
 
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: var(--bg);
+    color: var(--fg);
     background-image:
-      radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.1), transparent 25%),
-      radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+      radial-gradient(circle at 12% 18%, rgba(255, 217, 145, 0.35), transparent 45%),
+      radial-gradient(circle at 84% 12%, rgba(127, 212, 199, 0.28), transparent 40%),
+      linear-gradient(180deg, rgba(255, 250, 242, 0.9), rgba(242, 236, 226, 0.95));
     background-attachment: fixed;
-    /* Custom grid pattern */
-    background-size: 100% 100%, 100% 100%, 40px 40px;
-    background-position: 0 0, 0 0, 0 0;
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   }
 }
 
 .bg-grid-pattern {
-  background-size: 50px 50px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-image: linear-gradient(to right, rgba(28, 26, 22, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 26, 22, 0.06) 1px, transparent 1px);
 }
 
 .glass-panel {
-  background: rgba(16, 24, 39, 0.7);
+  background: rgba(255, 250, 242, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(28, 26, 22, 0.12);
+  box-shadow: 0 4px 30px rgba(28, 26, 22, 0.08);
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

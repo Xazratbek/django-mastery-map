@@ -1,14 +1,20 @@
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
+import { Fraunces, Space_Grotesk } from 'next/font/google';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import './globals.css';
 import { cn } from '@/utils/cn';
 
-const outfit = Outfit({
+const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-outfit',
+  variable: '--font-display',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-body',
 });
 
 export const metadata: Metadata = {
@@ -39,11 +45,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="uz" className="dark">
+    <html lang="uz">
       <body
-        className={cn(outfit.variable, 'font-sans antialiased bg-navy-900 text-slate-100 min-h-screen')}
+        className={cn(
+          fraunces.variable,
+          spaceGrotesk.variable,
+          'font-sans antialiased bg-[var(--bg)] text-[var(--fg)] min-h-screen'
+        )}
       >
-        <div className="absolute inset-0 z-[-1] bg-grid-pattern opacity-30"></div>
         {children}
         <SpeedInsights />
         <Analytics />
