@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import './globals.css';
 import { cn } from '@/utils/cn';
 
@@ -43,6 +45,8 @@ export default function RootLayout({
       >
         <div className="absolute inset-0 z-[-1] bg-grid-pattern opacity-30"></div>
         {children}
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
