@@ -54,6 +54,14 @@ export function ProgressHeader() {
 
         {/* Right side actions */}
         <div className="flex items-center gap-4">
+          <a
+            href="/cheatsheets"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs bg-white/5 hover:bg-white/10 text-slate-200 px-3 py-1.5 rounded-md border border-white/10 transition-colors"
+          >
+            Cheat Sheets
+          </a>
           <div className="flex items-center gap-2 text-sm">
             <ShieldCheck className={cn("w-4 h-4", isDRFUnlocked ? "text-cyan-400 drop-shadow-[0_0_5px_rgba(6,182,212,0.8)]" : "text-slate-600")} />
             <span className={cn(isDRFUnlocked ? "text-cyan-100" : "text-slate-500", "font-medium hidden sm:inline-block")}>

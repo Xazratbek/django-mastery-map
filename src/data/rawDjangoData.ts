@@ -1,6 +1,138 @@
-import { StageData } from '../types/roadmap';
+import { StageData, LessonContent, LessonMiniLab, LessonQuizQuestion } from '../types/roadmap';
 import { standardDeepWork } from './roadmapHelpers';
 import { lessonOverrides } from './lessonOverrides';
+import { lessonCustomizations } from './lessonCustomizations';
+
+const projectMappingByIsland: Record<string, string[]> = {
+  'django-foundation': [
+    'Muhit: .venv, requirements.txt',
+    'Core: settings.py, manage.py',
+    'Project strukturasi: apps/ va config/'
+  ],
+  'django-backend-funds': [
+    'apps/<app>/models.py va views.py',
+    'urls.py routing va namespaces',
+    'Template emas, sof backend logic'
+  ],
+  'django-db': [
+    'models.py va migrations/',
+    'selectors.py (QuerySet qatlami)',
+    'Index va constraintlar'
+  ],
+  'django-auth': [
+    'users app va CustomUser',
+    'services/auth.py (login/register)',
+    'permissions va access nazorati'
+  ],
+  'django-arch': [
+    'services.py va selectors.py',
+    'management/commands',
+    'tests/ va clean architecture'
+  ],
+  'django-perf': [
+    'cache layer va redis',
+    'celery tasks va workerlar',
+    'logging/monitoring'
+  ],
+  'django-checkpoint': [
+    'Full project integratsiya',
+    'testlar va optimizatsiya',
+    'deploymentga tayyorgarlik'
+  ],
+  'drf-setup': [
+    'api/serializers.py va views.py',
+    'urls.py va routerlar',
+    'Response/Request flow'
+  ],
+  'drf-serializers': [
+    'serializers.py va validators',
+    'input/output contract',
+    'serializer testlari'
+  ],
+  'drf-views': [
+    'views.py va viewsetlar',
+    'routerlar va actions',
+    'permission integration'
+  ],
+  'drf-auth': [
+    'permissions.py va auth services',
+    'JWT/session logikasi',
+    'security policies'
+  ],
+  'drf-advanced': [
+    'filtering va pagination',
+    'docs (swagger/redoc)',
+    'performance tuning'
+  ],
+  'drf-checkpoint-final': [
+    'full product API',
+    'audit va monitoring',
+    'production readiness'
+  ],
+};
+
+const buildMiniLab = (lesson: LessonContent, data: Partial<StageData>): LessonMiniLab => {
+  const fallbackTasks = lesson.goals?.map(goal => `Amaliyot: ${goal}`) || [];
+  const tasksSource =
+    (data.tasks && data.tasks.length > 0) ? data.tasks :
+    (data.exercises && data.exercises.length > 0) ? data.exercises :
+    fallbackTasks;
+
+  const tasks = tasksSource.slice(0, 4);
+  const expectedOutput = data.deliverable ? [data.deliverable] : (lesson.summary ? [lesson.summary] : []);
+
+  return {
+    title: "Mini-lab",
+    tasks,
+    expectedOutput: expectedOutput.length > 0 ? expectedOutput : ["Mini-lab natijasi: ishlaydigan kichik demo"]
+  };
+};
+
+const buildQuiz = (lesson: LessonContent, data: Partial<StageData>): LessonQuizQuestion[] => {
+  const focus = data.todayFocus || lesson.goals?.[0] || lesson.summary || 'Bugungi mavzu';
+  const why = data.whyItMatters || lesson.summary || 'Mavzu amaliyot uchun muhim';
+  const skip = (data.doNotStudyToday && data.doNotStudyToday[0]) || 'Asosiy fokusdan chalg\'imaslik';
+
+  return [
+    { question: "Bugungi fokus nima?", answer: focus },
+    { question: "Nega bu mavzu muhim?", answer: why },
+    { question: "Bugun nimani o'rganmaslik kerak?", answer: skip },
+  ];
+};
+
+const buildChallengeTasks = (lesson: LessonContent, data: Partial<StageData>): string[] => {
+  const tasks: string[] = [];
+  if (data.exercises && data.exercises.length > 0) {
+    tasks.push(...data.exercises);
+  }
+  if (tasks.length < 2 && data.tasks && data.tasks.length > 0) {
+    tasks.push(...data.tasks);
+  }
+  if (tasks.length < 2 && lesson.goals && lesson.goals.length > 0) {
+    tasks.push(...lesson.goals.map(goal => `Qo'shimcha amaliyot: ${goal}`));
+  }
+  while (tasks.length < 2) {
+    tasks.push("Bugungi mavzudan mustaqil kichik demo yozing va natijani tekshiring.");
+  }
+  return tasks.slice(0, 2);
+};
+
+const enhanceLesson = (lesson: LessonContent, data: Partial<StageData>, dayNumber: number): LessonContent => {
+  const custom = lessonCustomizations[dayNumber];
+  const mergedLesson = custom ? { ...lesson, ...custom } : lesson;
+  const islandId = data.islandId || 'django-foundation';
+  const projectMapping = mergedLesson.projectMapping && mergedLesson.projectMapping.length > 0
+    ? mergedLesson.projectMapping
+    : (projectMappingByIsland[islandId] || projectMappingByIsland['django-foundation']);
+
+  return {
+    ...mergedLesson,
+    miniLab: mergedLesson.miniLab || buildMiniLab(mergedLesson, data),
+    quiz: mergedLesson.quiz || buildQuiz(mergedLesson, data),
+    projectMapping,
+    challengeTasks: mergedLesson.challengeTasks || buildChallengeTasks(mergedLesson, data),
+  };
+};
 
 export const rawDjangoDays: Partial<StageData>[] = [
   {
@@ -4692,6 +4824,8 @@ export const processRawData = (rawData: Partial<StageData>[]): StageData[] => {
     // or set defaults based on category for visualization purposes
     const coords = { x: (Math.random() * 320) - 160, y: (Math.random() * 320) - 160 };
     const dayNumber = data.dayNumber ?? 1;
+    const baseLesson = lessonOverrides[dayNumber] ?? data.lesson;
+    const lesson = baseLesson ? enhanceLesson(baseLesson, data, dayNumber) : undefined;
 
     return {
       id: `day-${dayNumber}`,
@@ -4720,7 +4854,7 @@ export const processRawData = (rawData: Partial<StageData>[]): StageData[] => {
       commonMistakes: data.commonMistakes || ['Ignoring basic Python concepts'],
       ifStuck: data.ifStuck || 'Review Django documentation.',
       resourcesPlaceholder: ['Django Official Docs', 'DRF Official Docs'],
-      lesson: lessonOverrides[dayNumber] ?? data.lesson,
+      lesson,
       coordinates: data.coordinates || coords,
     } as StageData;
   });

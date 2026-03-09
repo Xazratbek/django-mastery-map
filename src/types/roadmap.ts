@@ -32,6 +32,18 @@ export interface LessonCodeSample {
   code: string;
 }
 
+export interface LessonMiniLab {
+  title: string;
+  tasks: string[];
+  expectedOutput: string[];
+}
+
+export interface LessonQuizQuestion {
+  question: string;
+  answer: string;
+  options?: string[];
+}
+
 export interface LessonSection {
   title: string;
   body?: string[];
@@ -44,6 +56,10 @@ export interface LessonContent {
   goals: string[];
   sections: LessonSection[];
   tips?: string[];
+  miniLab?: LessonMiniLab;
+  quiz?: LessonQuizQuestion[];
+  projectMapping?: string[];
+  challengeTasks?: string[];
 }
 
 export interface StageData {
