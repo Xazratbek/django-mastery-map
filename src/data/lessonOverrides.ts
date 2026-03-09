@@ -1,6 +1,8 @@
 import { LessonContent } from '../types/roadmap';
+import { aiConfusionRadarLesson } from './lessonAiConfusionRadar';
+import { drfLessonOverrides } from './drfLessonOverrides';
 
-export const lessonOverrides: Record<number, LessonContent> = {
+const baseLessonOverrides: Record<number, LessonContent> = {
   17: {
     summary: "Custom User - bu sizning loyihadagi foydalanuvchi modeli. Email login, telefon, rol, avatar kabi ehtiyoj bo'lsa default User yetmaydi. Eng muhimi - buni loyiha boshida tanlash.",
     goals: [
@@ -3386,4 +3388,10 @@ export const lessonOverrides: Record<number, LessonContent> = {
       }
     ]
   },
+  61: aiConfusionRadarLesson,
+};
+
+export const lessonOverrides: Record<number, LessonContent> = {
+  ...baseLessonOverrides,
+  ...drfLessonOverrides,
 };

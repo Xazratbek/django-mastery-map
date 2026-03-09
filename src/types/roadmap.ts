@@ -11,7 +11,8 @@ export type Category =
   | 'DRF Views, ViewSets & Routers'
   | 'Auth, Permissions & API Security'
   | 'Filtering, Pagination & Docs'
-  | 'DRF Checkpoint';
+  | 'DRF Checkpoint'
+  | 'AI Product Capstone';
 
 export type Status = 'locked' | 'unlocked' | 'completed';
 
@@ -49,6 +50,8 @@ export interface LessonSection {
   body?: string[];
   steps?: string[];
   codeSamples?: LessonCodeSample[];
+  anchorId?: string;
+  tocLabel?: string;
 }
 
 export interface LessonContent {

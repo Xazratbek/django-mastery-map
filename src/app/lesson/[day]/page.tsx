@@ -7,6 +7,12 @@ type LessonPageProps = {
 };
 
 const formatDay = (dayNumber: number) => `Day ${dayNumber}`;
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 export default async function LessonPage({ params }: LessonPageProps) {
   const { day } = await params;
@@ -21,6 +27,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
   }
 
   const lesson = stage.lesson;
+  const sectionItems = lesson?.sections?.map((section, index) => {
+    const baseId = section.anchorId || slugify(section.title);
+    const fallbackId = baseId ? `${baseId}-${index + 1}` : `section-${index + 1}`;
+    return {
+      id: section.anchorId || fallbackId,
+      label: section.tocLabel || section.title,
+    };
+  }) ?? [];
 
   return (
     <main className="min-h-screen bg-navy-950 text-slate-100">
@@ -113,44 +127,74 @@ export default async function LessonPage({ params }: LessonPageProps) {
               </div>
             </section>
 
-            <section className="space-y-6">
-              {lesson.sections.map((section, index) => (
-                <div key={index} className="bg-navy-900/40 border border-white/10 rounded-2xl p-6 space-y-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-lg font-black text-white">{section.title}</h3>
-                    <span className="text-[11px] uppercase tracking-widest text-slate-500 font-bold">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-                  {section.body?.map((paragraph, pIdx) => (
-                    <p key={pIdx} className="text-sm text-slate-300 leading-relaxed">
-                      {paragraph}
-                    </p>
-                  ))}
-                  {section.steps && section.steps.length > 0 && (
-                    <ol className="space-y-2 list-decimal list-inside text-sm text-slate-300">
-                      {section.steps.map((step, sIdx) => (
-                        <li key={sIdx}>{step}</li>
+            <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+              <div className="space-y-6">
+                {lesson.sections.map((section, index) => {
+                  const sectionId = sectionItems[index]?.id || `section-${index + 1}`;
+                  return (
+                    <div
+                      key={index}
+                      id={sectionId}
+                      className="bg-navy-900/40 border border-white/10 rounded-2xl p-6 space-y-4 scroll-mt-24"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <h3 className="text-lg font-black text-white">{section.title}</h3>
+                        <span className="text-[11px] uppercase tracking-widest text-slate-500 font-bold">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                      </div>
+                      {section.body?.map((paragraph, pIdx) => (
+                        <p key={pIdx} className="text-sm text-slate-300 leading-relaxed">
+                          {paragraph}
+                        </p>
                       ))}
-                    </ol>
-                  )}
-                  {section.codeSamples && section.codeSamples.length > 0 && (
-                    <div className="space-y-3">
-                      {section.codeSamples.map((sample, sIdx) => (
-                        <div key={sIdx} className="border border-white/10 rounded-xl overflow-hidden bg-black/40">
-                          <div className="flex items-center justify-between px-3 py-2 bg-white/5 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
-                            <span>{sample.title}</span>
-                            <span>{sample.language}</span>
-                          </div>
-                          <pre className="text-xs text-slate-200 font-mono p-3 overflow-x-auto whitespace-pre">
-                            {sample.code}
-                          </pre>
+                      {section.steps && section.steps.length > 0 && (
+                        <ol className="space-y-2 list-decimal list-inside text-sm text-slate-300">
+                          {section.steps.map((step, sIdx) => (
+                            <li key={sIdx}>{step}</li>
+                          ))}
+                        </ol>
+                      )}
+                      {section.codeSamples && section.codeSamples.length > 0 && (
+                        <div className="space-y-3">
+                          {section.codeSamples.map((sample, sIdx) => (
+                            <div key={sIdx} className="border border-white/10 rounded-xl overflow-hidden bg-black/40">
+                              <div className="flex items-center justify-between px-3 py-2 bg-white/5 text-[10px] uppercase font-bold text-slate-400 tracking-widest">
+                                <span>{sample.title}</span>
+                                <span>{sample.language}</span>
+                              </div>
+                              <pre className="text-xs text-slate-200 font-mono p-3 overflow-x-auto whitespace-pre">
+                                {sample.code}
+                              </pre>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  );
+                })}
+              </div>
+              {sectionItems.length > 0 && (
+                <aside className="hidden lg:block">
+                  <div className="sticky top-24 bg-navy-900/60 border border-white/10 rounded-2xl p-4 space-y-3">
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">Bo&apos;limlar</h3>
+                    <nav className="space-y-2 text-sm text-slate-300">
+                      {sectionItems.map((item, index) => (
+                        <a
+                          key={item.id}
+                          href={`#${item.id}`}
+                          className="flex items-start gap-2 hover:text-white transition-colors"
+                        >
+                          <span className="text-[10px] text-slate-500 mt-0.5">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <span>{item.label}</span>
+                        </a>
+                      ))}
+                    </nav>
+                  </div>
+                </aside>
+              )}
             </section>
 
             {lesson.miniLab && (

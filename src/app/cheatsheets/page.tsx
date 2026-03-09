@@ -129,7 +129,7 @@ export default function CheatSheetsPage() {
                 rel="noreferrer"
                 className="text-xs font-bold uppercase tracking-widest text-cyan-300 hover:text-cyan-200"
               >
-                Darsga o'tish
+                Darsga o&apos;tish
               </a>
             </div>
 

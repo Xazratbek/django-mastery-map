@@ -1,11 +1,12 @@
 import { LessonQuizQuestion } from '../types/roadmap';
+import { drfLessonCustomizations } from './drfLessonCustomizations';
 
 type LessonCustomization = {
   quiz?: LessonQuizQuestion[];
   challengeTasks?: string[];
 };
 
-export const lessonCustomizations: Record<number, LessonCustomization> = {
+const baseLessonCustomizations: Record<number, LessonCustomization> = {
   1: {
     quiz: [
       { question: 'Inheritance nima?', answer: "Bitta classdagi xususiyat va metodlarni boshqa classga meros berish." },
@@ -347,4 +348,9 @@ export const lessonCustomizations: Record<number, LessonCustomization> = {
       'ModelSerializer bilan list endpoint yozib JSON qaytaring.'
     ]
   }
+};
+
+export const lessonCustomizations: Record<number, LessonCustomization> = {
+  ...baseLessonCustomizations,
+  ...drfLessonCustomizations,
 };
