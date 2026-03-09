@@ -1,6 +1,6 @@
 'use client';
 
-import { islands, roadmapData } from '@/data/roadmapData';
+import { roadmapData } from '@/data/roadmapData';
 import { IslandData } from '@/types/roadmap';
 import { StageNode } from './StageNode';
 import { useProgressStore } from '@/store/progressStore';
@@ -28,13 +28,36 @@ export function IslandCluster({ island }: { island: IslandData }) {
 
   if (stages.length === 0) return null;
 
+  const CONTAINER_SIZE = 300;
+  const NODE_SPACING = 150;
+  const BASE_RADIUS = 200;
+  const RING_GAP = 100;
+  const RESERVED_ANGLE = Math.PI / 3;
+  const availableAngle = (Math.PI * 2) - RESERVED_ANGLE;
+
+  const buildRings = (total: number) => {
+    const rings: { count: number; radius: number }[] = [];
+    let remaining = total;
+    let ringIndex = 0;
+
+    while (remaining > 0) {
+      const radius = BASE_RADIUS + (ringIndex * RING_GAP);
+      const capacity = Math.max(4, Math.floor((availableAngle * radius) / NODE_SPACING));
+      const count = Math.min(remaining, capacity);
+
+      rings.push({ count, radius });
+      remaining -= count;
+      ringIndex += 1;
+    }
+
+    return rings;
+  };
+
   const orderedStages = [...stages].sort((a, b) => a.dayNumber - b.dayNumber);
-  const lockedStages = orderedStages.filter(stage => !isUnlocked(stage.id));
-  const openStages = orderedStages.filter(stage => isUnlocked(stage.id));
-  const islandIndex = islands.findIndex(item => item.id === island.id);
-  const nextIsland = islandIndex >= 0 ? islands[islandIndex + 1] : undefined;
-  const ringStages = nextIsland ? openStages : orderedStages;
-  const lineStages = nextIsland ? lockedStages : [];
+  const ringStages = orderedStages;
+  const ringLayout = ringStages.length > 0 ? buildRings(ringStages.length) : [];
+  const ringMaxRadius = ringLayout.length > 0 ? ringLayout[ringLayout.length - 1].radius : BASE_RADIUS;
+  const titleTop = (CONTAINER_SIZE / 2) - ringMaxRadius - 70;
 
   return (
     <div
@@ -42,8 +65,8 @@ export function IslandCluster({ island }: { island: IslandData }) {
       style={{
         left: island.x,
         top: island.y,
-        width: 300,
-        height: 300,
+        width: CONTAINER_SIZE,
+        height: CONTAINER_SIZE,
       }}
     >
       {/* Island Background Glow */}
@@ -70,9 +93,12 @@ export function IslandCluster({ island }: { island: IslandData }) {
       />
 
       {/* Island Title */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+      <div
+        className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-50"
+        style={{ top: titleTop }}
+      >
         <div
-          className="bg-navy-900/95 border px-4 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg text-center max-w-[220px] backdrop-blur"
+          className="bg-navy-900/95 border px-4 py-2 rounded-2xl text-sm font-black tracking-widest uppercase shadow-lg text-center max-w-[240px] backdrop-blur"
           style={{ borderColor: island.glowColor, color: island.color }}
         >
           {island.title}
@@ -80,41 +106,23 @@ export function IslandCluster({ island }: { island: IslandData }) {
       </div>
 
       {ringStages.map((stage, index) => {
-        const total = ringStages.length;
-        const radius = total === 1 ? 140 : 170;
-        const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
+        let ringIndex = 0;
+        let indexInRing = index;
+
+        while (ringIndex < ringLayout.length && indexInRing >= ringLayout[ringIndex].count) {
+          indexInRing -= ringLayout[ringIndex].count;
+          ringIndex += 1;
+        }
+
+        const ring = ringLayout[ringIndex] ?? { count: ringStages.length, radius: BASE_RADIUS };
+        const count = ring.count;
+        const radius = ringStages.length === 1 ? BASE_RADIUS : ring.radius;
+        const startAngle = (-Math.PI / 2) + (RESERVED_ANGLE / 2);
+        const angleStep = count > 1 ? availableAngle / count : 0;
+        const ringOffset = (ringIndex % 2 === 0 ? 0 : angleStep / 2);
+        const angle = count === 1 ? Math.PI / 2 : startAngle + ringOffset + (angleStep * indexInRing);
         const dynamicX = Math.cos(angle) * radius;
         const dynamicY = Math.sin(angle) * radius;
-
-        return (
-          <StageNode
-             key={stage.id}
-             stage={stage}
-             islandHue={island.color}
-             dynamicX={dynamicX}
-             dynamicY={dynamicY}
-          />
-        );
-      })}
-
-      {nextIsland && lineStages.map((stage, index) => {
-        const pathDx = nextIsland.x - island.x;
-        const pathDy = nextIsland.y - island.y;
-        const pathLength = Math.hypot(pathDx, pathDy) || 1;
-        const baseRadius = ringStages.length === 1 ? 140 : 170;
-        let minT = (baseRadius + 32) / pathLength;
-        minT = Math.max(0.2, Math.min(0.45, minT));
-        let maxT = 1 - minT;
-        if (maxT <= minT) {
-          minT = 0.45;
-          maxT = 0.55;
-        }
-        const t = minT + ((index + 1) / (lineStages.length + 1)) * (maxT - minT);
-        const normalX = -pathDy / pathLength;
-        const normalY = pathDx / pathLength;
-        const offset = ((index % 3) - 1) * 26;
-        const dynamicX = pathDx * t + normalX * offset;
-        const dynamicY = pathDy * t + normalY * offset;
 
         return (
           <StageNode
