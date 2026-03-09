@@ -3964,5 +3964,627 @@ export const conceptCheatSheets: ConceptCheatSheet[] = [
       code: "title = models.CharField(max_length=200, unique_for_year='published_at')"
     },
     tags: ['params', 'unique_for_year']
+  },
+  {
+    id: 'substr',
+    title: 'Substr() - substring olish',
+    category: 'ORM Functions',
+    description: [
+      'Substr stringdan bo\'lak kesib oladi.',
+      'DB ichida substring hisoblanadi.',
+      'Annotate bilan yangi field yaratadi.',
+      'Large stringlarni qisqartirishda foydali.'
+    ],
+    whenToUse: [
+      'Prefix yoki short code olishda.',
+      'Display uchun qisqa title kerak bo\'lsa.',
+      'DB ichida substring kerak bo\'lsa.',
+      'Report formatlashda.'
+    ],
+    codeSample: {
+      title: 'Substr',
+      language: 'python',
+      code: "from django.db.models.functions import Substr\n\nBook.objects.annotate(code=Substr('isbn', 1, 4))"
+    },
+    tags: ['substr', 'db functions']
+  },
+  {
+    id: 'replace',
+    title: 'Replace() - string almashtirish',
+    category: 'ORM Functions',
+    description: [
+      'Replace stringdagi qismni boshqa qiymatga almashtiradi.',
+      'DB ichida ishlaydi, Python loop kerak emas.',
+      'Annotate bilan ishlatiladi.',
+      'Normalization va cleanup uchun qulay.'
+    ],
+    whenToUse: [
+      'Stringdan belgi olib tashlashda.',
+      'Formatlash va cleanup kerak bo\'lsa.',
+      'DB ichida batch replace kerak bo\'lsa.',
+      'Legacy data tozalashda.'
+    ],
+    codeSample: {
+      title: 'Replace',
+      language: 'python',
+      code: "from django.db.models.functions import Replace\n\nBook.objects.annotate(clean_title=Replace('title', '  ', ' '))"
+    },
+    tags: ['replace', 'db functions']
+  },
+  {
+    id: 'trim',
+    title: 'Trim() - bo\'sh joyni olib tashlash',
+    category: 'ORM Functions',
+    description: [
+      'Trim string boshidagi va oxiridagi bo\'sh joylarni olib tashlaydi.',
+      'DB ichida ishlaydi.',
+      'LTrim/RTrim variantlari ham bor.',
+      'Data cleanup uchun foydali.'
+    ],
+    whenToUse: [
+      'User inputda keraksiz bo\'sh joylar bo\'lsa.',
+      'Normalization kerak bo\'lsa.',
+      'Search ishlari to\'g\'ri bo\'lishi uchun.',
+      'Import data tozalashda.'
+    ],
+    codeSample: {
+      title: 'Trim',
+      language: 'python',
+      code: "from django.db.models.functions import Trim\n\nBook.objects.annotate(title_clean=Trim('title'))"
+    },
+    tags: ['trim', 'db functions']
+  },
+  {
+    id: 'now',
+    title: 'Now() - DB server vaqti',
+    category: 'ORM Functions',
+    description: [
+      'Now() DB serverdagi joriy vaqtni qaytaradi.',
+      'Python timezone.now bilan farq qiladi.',
+      'Annotate va filterda ishlatiladi.',
+      'DB darajasida hisoblash uchun qulay.'
+    ],
+    whenToUse: [
+      'DB vaqtiga tayanish kerak bo\'lsa.',
+      'Expire yoki SLA tekshiruvlarda.',
+      'SQL inside datetime comparison uchun.',
+      'Performance uchun.'
+    ],
+    codeSample: {
+      title: 'Now',
+      language: 'python',
+      code: "from django.db.models.functions import Now\n\nBook.objects.filter(expires_at__lt=Now())"
+    },
+    tags: ['now', 'db functions']
+  },
+  {
+    id: 'extract-year',
+    title: 'ExtractYear() - yilni olish',
+    category: 'ORM Functions',
+    description: [
+      'ExtractYear datetime fielddan yilni chiqaradi.',
+      'Group by va statistikalar uchun ishlatiladi.',
+      'Annotate ichida ishlaydi.',
+      'DB darajasida tez hisoblanadi.'
+    ],
+    whenToUse: [
+      'Yil bo\'yicha statistikalar uchun.',
+      'Arxiv yoki reportlarda.',
+      'Filter va grouping qilishda.',
+      'Datetime field bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'ExtractYear',
+      language: 'python',
+      code: "from django.db.models.functions import ExtractYear\n\nBook.objects.annotate(year=ExtractYear('created_at'))"
+    },
+    tags: ['extractyear', 'db functions']
+  },
+  {
+    id: 'extract-month',
+    title: 'ExtractMonth() - oyni olish',
+    category: 'ORM Functions',
+    description: [
+      'ExtractMonth datetime fielddan oyni chiqaradi.',
+      'Monthly reportlar uchun qulay.',
+      'Annotate bilan ishlatiladi.',
+      'DB darajasida tez ishlaydi.'
+    ],
+    whenToUse: [
+      'Oy bo\'yicha statistikalar uchun.',
+      'Monthly chartlarda.',
+      'Datetime field bo\'lsa.',
+      'Filter yoki grouping uchun.'
+    ],
+    codeSample: {
+      title: 'ExtractMonth',
+      language: 'python',
+      code: "from django.db.models.functions import ExtractMonth\n\nBook.objects.annotate(month=ExtractMonth('created_at'))"
+    },
+    tags: ['extractmonth', 'db functions']
+  },
+  {
+    id: 'extract-day',
+    title: 'ExtractDay() - kunni olish',
+    category: 'ORM Functions',
+    description: [
+      'ExtractDay datetime fielddan kunni chiqaradi.',
+      'Daily reportlar uchun ishlatiladi.',
+      'Annotate bilan ishlaydi.',
+      'DB ichida hisoblanadi.'
+    ],
+    whenToUse: [
+      'Kunlik statistikalar uchun.',
+      'Datetime field bo\'lsa.',
+      'Filter/grouping uchun.',
+      'Analytics uchun.'
+    ],
+    codeSample: {
+      title: 'ExtractDay',
+      language: 'python',
+      code: "from django.db.models.functions import ExtractDay\n\nBook.objects.annotate(day=ExtractDay('created_at'))"
+    },
+    tags: ['extractday', 'db functions']
+  },
+  {
+    id: 'trunc-month',
+    title: 'TruncMonth() - oyni kesish',
+    category: 'ORM Functions',
+    description: [
+      'TruncMonth datetime ni oy boshiga kesadi.',
+      'Month bo\'yicha grouping uchun qulay.',
+      'DB ichida ishlaydi.',
+      'Report va chartlarda ishlatiladi.'
+    ],
+    whenToUse: [
+      'Monthly chartlar uchun.',
+      'Group by month kerak bo\'lsa.',
+      'Datetime field bo\'lsa.',
+      'Analytics uchun.'
+    ],
+    codeSample: {
+      title: 'TruncMonth',
+      language: 'python',
+      code: "from django.db.models.functions import TruncMonth\n\nOrder.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(total=Count('id'))"
+    },
+    tags: ['truncmonth', 'db functions']
+  },
+  {
+    id: 'trunc-year',
+    title: 'TruncYear() - yilni kesish',
+    category: 'ORM Functions',
+    description: [
+      'TruncYear datetime ni yil boshiga kesadi.',
+      'Yearly reportlar uchun qulay.',
+      'DB ichida grouping uchun ishlatiladi.',
+      'Date based analytics uchun.'
+    ],
+    whenToUse: [
+      'Yillik reportlar uchun.',
+      'Yearly grouping kerak bo\'lsa.',
+      'Datetime field bo\'lsa.',
+      'Business analytics uchun.'
+    ],
+    codeSample: {
+      title: 'TruncYear',
+      language: 'python',
+      code: "from django.db.models.functions import TruncYear\n\nOrder.objects.annotate(year=TruncYear('created_at')).values('year').annotate(total=Count('id'))"
+    },
+    tags: ['truncyear', 'db functions']
+  },
+  {
+    id: 'greatest',
+    title: 'Greatest() - eng katta qiymat',
+    category: 'ORM Functions',
+    description: [
+      'Greatest bir nechta qiymatdan eng kattasini tanlaydi.',
+      'Discount yoki price compare uchun qulay.',
+      'DB ichida hisoblanadi.',
+      'Annotate bilan ishlaydi.'
+    ],
+    whenToUse: [
+      'Ikki fielddan eng kattasini olishda.',
+      'Discount comparisonda.',
+      'Pricing rulelarda.',
+      'Computed field kerak bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'Greatest',
+      language: 'python',
+      code: "from django.db.models.functions import Greatest\n\nProduct.objects.annotate(best_price=Greatest('price', 'discount_price'))"
+    },
+    tags: ['greatest', 'db functions']
+  },
+  {
+    id: 'least',
+    title: 'Least() - eng kichik qiymat',
+    category: 'ORM Functions',
+    description: [
+      'Least bir nechta qiymatdan eng kichigini tanlaydi.',
+      'Discount yoki min price uchun qulay.',
+      'DB ichida hisoblanadi.',
+      'Annotate bilan ishlaydi.'
+    ],
+    whenToUse: [
+      'Ikki fielddan eng kichigini olishda.',
+      'Chegirma hisobida.',
+      'Pricing rulelarda.',
+      'Computed field kerak bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'Least',
+      language: 'python',
+      code: "from django.db.models.functions import Least\n\nProduct.objects.annotate(min_price=Least('price', 'discount_price'))"
+    },
+    tags: ['least', 'db functions']
+  },
+  {
+    id: 'round',
+    title: 'Round() - yaxlitlash',
+    category: 'ORM Functions',
+    description: [
+      'Round qiymatni DB ichida yaxlitlaydi.',
+      'Decimal yoki float qiymatlar uchun.',
+      'Annotate bilan ishlatiladi.',
+      'Report va pricingda foydali.'
+    ],
+    whenToUse: [
+      'Price yoki ratingni yaxlitlashda.',
+      'Reportlarda ko\'rsatish uchun.',
+      'DB ichida rounding kerak bo\'lsa.',
+      'Precision nazorati uchun.'
+    ],
+    codeSample: {
+      title: 'Round',
+      language: 'python',
+      code: "from django.db.models.functions import Round\n\nBook.objects.annotate(avg=Round(Avg('rating'), 2))"
+    },
+    tags: ['round', 'db functions']
+  },
+  {
+    id: 'abs',
+    title: 'Abs() - modul qiymat',
+    category: 'ORM Functions',
+    description: [
+      'Abs qiymatning modulini qaytaradi.',
+      'Negative qiymatlarni musbatga aylantiradi.',
+      'DB ichida hisoblanadi.',
+      'Math hisoblar uchun.'
+    ],
+    whenToUse: [
+      'Absolute qiymat kerak bo\'lsa.',
+      'Difference hisoblarida.',
+      'Analytics va scoringda.',
+      'Math funksiyalar bilan ishlashda.'
+    ],
+    codeSample: {
+      title: 'Abs',
+      language: 'python',
+      code: "from django.db.models.functions import Abs\n\nBook.objects.annotate(delta=Abs(F('price') - 10))"
+    },
+    tags: ['abs', 'db functions']
+  },
+  {
+    id: 'case-when',
+    title: 'Case/When - shartli ifoda',
+    category: 'ORM Functions',
+    description: [
+      'Case/When SQL ichida if-else logika beradi.',
+      'Annotate bilan shartli field yaratish mumkin.',
+      'Business rulelarni DB ichida ishlatadi.',
+      'Report va segmentatsiyada qulay.'
+    ],
+    whenToUse: [
+      'Shartli qiymat qaytarish kerak bo\'lsa.',
+      'Segment yoki status hisoblashda.',
+      'Pricing yoki label logikada.',
+      'SQL darajasida classification kerak bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'Case/When',
+      language: 'python',
+      code: "from django.db.models import Case, When, Value, CharField\n\nBook.objects.annotate(flag=Case(When(price__lte=0, then=Value('free')), default=Value('paid'), output_field=CharField()))"
+    },
+    tags: ['case', 'when', 'db functions']
+  },
+  {
+    id: 'expression-wrapper',
+    title: 'ExpressionWrapper - murakkab ifoda',
+    category: 'ORM Functions',
+    description: [
+      'ExpressionWrapper murakkab ifodaga output_field beradi.',
+      'Matematik hisoblashda foydali.',
+      'Annotate bilan ishlatiladi.',
+      'DB ichida hisoblanadi.'
+    ],
+    whenToUse: [
+      'Murakkab arifmetik ifoda kerak bo\'lsa.',
+      'Output type aniq bo\'lishi kerak bo\'lsa.',
+      'Pricing yoki scoring hisobida.',
+      'DB ichida computed field uchun.'
+    ],
+    codeSample: {
+      title: 'ExpressionWrapper',
+      language: 'python',
+      code: "from django.db.models import ExpressionWrapper, DecimalField, F\n\nBook.objects.annotate(total=ExpressionWrapper(F('price') * F('qty'), output_field=DecimalField()))"
+    },
+    tags: ['expressionwrapper', 'db functions']
+  },
+  {
+    id: 'exists-expression',
+    title: 'Exists - boolean subquery',
+    category: 'ORM Functions',
+    description: [
+      'Exists subquery natijasini boolean qiladi.',
+      'Annotate bilan true/false flag beradi.',
+      'DB ichida tez ishlaydi.',
+      'Permission yoki status tekshirishda foydali.'
+    ],
+    whenToUse: [
+      'Related data bor-yo\'qligini bilishda.',
+      'Boolean flag kerak bo\'lsa.',
+      'Performance muhim bo\'lsa.',
+      'Large datasetlarda.'
+    ],
+    codeSample: {
+      title: 'Exists',
+      language: 'python',
+      code: "from django.db.models import Exists, OuterRef\n\npaid = Order.objects.filter(user=OuterRef('pk'), status='paid')\nUser.objects.annotate(has_paid=Exists(paid))"
+    },
+    tags: ['exists', 'subquery']
+  },
+  {
+    id: 'subquery',
+    title: 'Subquery/OuterRef - ichki query',
+    category: 'ORM Functions',
+    description: [
+      'Subquery ichki QuerySet natijasini ishlatadi.',
+      'OuterRef tashqi queryga bog\'lanadi.',
+      'Complex SQL yozmasdan advanced query qurish mumkin.',
+      'Performance va flexibility beradi.'
+    ],
+    whenToUse: [
+      'Har row uchun related field kerak bo\'lsa.',
+      'Latest record olishda.',
+      'Advanced analytics querylarda.',
+      'SQL yozmasdan subquery kerak bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'Subquery',
+      language: 'python',
+      code: "from django.db.models import OuterRef, Subquery\n\nlatest = Comment.objects.filter(book=OuterRef('pk')).order_by('-created_at').values('text')[:1]\nBook.objects.annotate(last_comment=Subquery(latest))"
+    },
+    tags: ['subquery', 'outerref']
+  },
+  {
+    id: 'all-none',
+    title: 'all() / none() - QuerySet boshqarish',
+    category: 'ORM Core',
+    description: [
+      'all() barcha obyektlarni qaytaradi (QuerySet).',
+      'none() bo\'sh QuerySet qaytaradi.',
+      'Chain qilish uchun qulay.',
+      'Conditional querylarda ishlatiladi.'
+    ],
+    whenToUse: [
+      'Default list olishda.',
+      'Condition bo\'lsa none() qaytarishda.',
+      'QuerySet chain soddalashganda.',
+      'Custom filtering logikasida.'
+    ],
+    codeSample: {
+      title: 'all/none',
+      language: 'python',
+      code: "qs = Book.objects.all()\nqs = Book.objects.none()"
+    },
+    tags: ['all', 'none', 'orm']
+  },
+  {
+    id: 'count-method',
+    title: 'count() - tez sanash',
+    category: 'ORM Core',
+    description: [
+      'count() QuerySet sonini qaytaradi.',
+      'SQL COUNT(*) ishlatadi.',
+      'exists() faqat bor-yo\'qligini tekshiradi, tezroq bo\'lishi mumkin.',
+      'Large datasetda ehtiyot bo\'ling.'
+    ],
+    whenToUse: [
+      'Obyektlar soni kerak bo\'lsa.',
+      'Pagination meta data uchun.',
+      'Dashboard statistikada.',
+      'Validation uchun count kerak bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'count',
+      language: 'python',
+      code: "total = Book.objects.filter(is_active=True).count()"
+    },
+    tags: ['count', 'orm']
+  },
+  {
+    id: 'in-bulk',
+    title: 'in_bulk() - dict bilan olish',
+    category: 'ORM Core',
+    description: [
+      'in_bulk id bo\'yicha dict qaytaradi.',
+      'Keylar id, value esa model obyektlari.',
+      'Bulk lookup uchun tez.',
+      'Order saqlanmaydi.'
+    ],
+    whenToUse: [
+      'ID ro\'yxati bo\'lsa tez olishda.',
+      'Batch lookup qilishda.',
+      'Dictionary kerak bo\'lsa.',
+      'Performance uchun.'
+    ],
+    codeSample: {
+      title: 'in_bulk',
+      language: 'python',
+      code: "items = Book.objects.in_bulk([1, 2, 3])"
+    },
+    tags: ['in_bulk', 'orm']
+  },
+  {
+    id: 'bulk-update',
+    title: 'bulk_update() - ko\'p obyektni yangilash',
+    category: 'ORM Core',
+    description: [
+      'bulk_update bir nechta obyektni bitta query bilan update qiladi.',
+      'save() va signals ishlamasligi mumkin.',
+      'Fieldlar ro\'yxatini berish shart.',
+      'Katta datasetda tez.'
+    ],
+    whenToUse: [
+      'Ko\'p obyektni bir vaqtda update qilishda.',
+      'Performance muhim bo\'lsa.',
+      'Signals kerak bo\'lmasa.',
+      'Import/sync jarayonlarida.'
+    ],
+    codeSample: {
+      title: 'bulk_update',
+      language: 'python',
+      code: "Book.objects.bulk_update(books, ['price', 'stock'])"
+    },
+    tags: ['bulk_update', 'orm']
+  },
+  {
+    id: 'using',
+    title: 'using() - multi-DB query',
+    category: 'ORM Core',
+    description: [
+      'using() QuerySetni aniq database bilan ishlatadi.',
+      'Multiple database setupda kerak bo\'ladi.',
+      'Read/Write DB ajratishda ishlatiladi.',
+      'Default DBdan tashqari ishlash uchun.'
+    ],
+    whenToUse: [
+      'Multiple DB ishlatilsa.',
+      'Read replica bo\'lsa.',
+      'Legacy DB bilan parallel ishlashda.',
+      'Database routing bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'using',
+      language: 'python',
+      code: "Book.objects.using('replica').filter(is_active=True)"
+    },
+    tags: ['using', 'orm']
+  },
+  {
+    id: 'raw',
+    title: 'raw() - raw SQL',
+    category: 'ORM Core',
+    description: [
+      'raw() bilan SQL yozib model obyektlari olinadi.',
+      'ORM yetarli bo\'lmagan joylarda ishlatiladi.',
+      'SQL injectionga ehtiyot bo\'ling.',
+      'Only read querylarda ishlatish tavsiya.'
+    ],
+    whenToUse: [
+      'Complex query ORMda qiyin bo\'lsa.',
+      'Performance uchun raw SQL kerak bo\'lsa.',
+      'Legacy SQL mavjud bo\'lsa.',
+      'Advanced reportlarda.'
+    ],
+    codeSample: {
+      title: 'raw',
+      language: 'python',
+      code: "Book.objects.raw('SELECT * FROM books WHERE is_active = true')"
+    },
+    tags: ['raw', 'orm']
+  },
+  {
+    id: 'union',
+    title: 'union() - QuerySet birlashtirish',
+    category: 'ORM Core',
+    description: [
+      'union ikki QuerySetni birlashtiradi.',
+      'Natija duplicate bo\'lsa distinct bo\'ladi.',
+      'Fieldlar bir xil bo\'lishi kerak.',
+      'SQL UNION ishlatiladi.'
+    ],
+    whenToUse: [
+      'Ikki QuerySet natijasini birlashtirishda.',
+      'Search natijalarini qo\'shishda.',
+      'Duplicate qabul qilinmasa.',
+      'Multi-source querylarda.'
+    ],
+    codeSample: {
+      title: 'union',
+      language: 'python',
+      code: "qs = Book.objects.filter(is_active=True).union(Book.objects.filter(is_featured=True))"
+    },
+    tags: ['union', 'orm']
+  },
+  {
+    id: 'intersection',
+    title: 'intersection() - kesishma',
+    category: 'ORM Core',
+    description: [
+      'intersection ikkita QuerySet kesishmasini beradi.',
+      'SQL INTERSECT ishlatiladi (DB support talab qiladi).',
+      'Fieldlar bir xil bo\'lishi kerak.',
+      'Not supported DBlarda ishlamasligi mumkin.'
+    ],
+    whenToUse: [
+      'Ikki QuerySet kesishmasi kerak bo\'lsa.',
+      'Shared natijalarni olishda.',
+      'Advanced querylarda.',
+      'DB support bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'intersection',
+      language: 'python',
+      code: "qs = Book.objects.filter(is_active=True).intersection(Book.objects.filter(is_featured=True))"
+    },
+    tags: ['intersection', 'orm']
+  },
+  {
+    id: 'difference',
+    title: 'difference() - farq',
+    category: 'ORM Core',
+    description: [
+      'difference birinchi QuerySetdan ikkinchisini ayiradi.',
+      'SQL EXCEPT ishlatiladi (DB support talab qiladi).',
+      'Fieldlar bir xil bo\'lishi kerak.',
+      'Not supported DBlarda ishlamasligi mumkin.'
+    ],
+    whenToUse: [
+      'Bir listdan boshqasini ayirish kerak bo\'lsa.',
+      'Exclude logika advanced bo\'lsa.',
+      'Set-like querylar uchun.',
+      'DB support bo\'lsa.'
+    ],
+    codeSample: {
+      title: 'difference',
+      language: 'python',
+      code: "qs = Book.objects.filter(is_active=True).difference(Book.objects.filter(is_featured=True))"
+    },
+    tags: ['difference', 'orm']
+  },
+  {
+    id: 'reverse-order',
+    title: 'reverse() - tartibni teskarilash',
+    category: 'ORM Core',
+    description: [
+      'reverse() QuerySet tartibini teskarilaydi.',
+      'order_by bo\'lsa shu tartib bo\'yicha teskarilaydi.',
+      'Slicingdan oldin ishlatilsa foydali.',
+      'DBda ORDER BY DESC/ASC o\'zgartiradi.'
+    ],
+    whenToUse: [
+      'Order_by natijasini teskarilashda.',
+      'Paginationda oldingi sahifalarni ko\'rsatishda.',
+      'List sortingni tez o\'zgartirishda.',
+      'UI sorting toggle uchun.'
+    ],
+    codeSample: {
+      title: 'reverse',
+      language: 'python',
+      code: "qs = Book.objects.order_by('created_at').reverse()"
+    },
+    tags: ['reverse', 'orm']
   }
+
 ];
