@@ -62,7 +62,10 @@ export function IslandCluster({ island }: { island: IslandData }) {
       />
 
       {/* Island Title */}
-      <div className="absolute -top-10 bg-navy-900 border px-4 py-1.5 rounded-full text-sm font-black tracking-widest uppercase shadow-lg z-10" style={{ borderColor: island.glowColor, color: island.color }}>
+      <div
+        className="absolute -top-10 bg-navy-900 border px-4 py-1.5 rounded-full text-sm font-black tracking-widest uppercase shadow-lg z-40 pointer-events-none"
+        style={{ borderColor: island.glowColor, color: island.color }}
+      >
         {island.title}
       </div>
 

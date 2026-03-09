@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation';
 import { roadmapData } from '@/data/roadmapData';
 
 type LessonPageProps = {
-  params: { day: string };
+  params: { day: string } | Promise<{ day: string }>;
 };
 
 const formatDay = (dayNumber: number) => `Day ${dayNumber}`;
 
-export default function LessonPage({ params }: LessonPageProps) {
-  const dayNumber = Number(params.day);
+export default async function LessonPage({ params }: LessonPageProps) {
+  const { day } = await params;
+  const dayNumber = Number(day);
   if (!Number.isFinite(dayNumber)) {
     notFound();
   }
