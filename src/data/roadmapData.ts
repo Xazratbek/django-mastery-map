@@ -1,4 +1,4 @@
-import { IslandData, StageData, Category } from '../types/roadmap';
+import { IslandData, StageData } from '../types/roadmap';
 import { rawDjangoDays, processRawData } from './rawDjangoData';
 
 export const islands: IslandData[] = [

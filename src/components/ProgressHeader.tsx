@@ -1,8 +1,8 @@
 'use client';
 
 import { useProgressStore } from '@/store/progressStore';
-import { islands, roadmapData } from '@/data/roadmapData';
-import { Trophy, Compass, ShieldCheck } from 'lucide-react';
+import { roadmapData } from '@/data/roadmapData';
+import { Compass, ShieldCheck } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 

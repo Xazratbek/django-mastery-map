@@ -23,7 +23,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0 },
 };
 
 export function RoadmapLibrary() {
@@ -90,12 +90,12 @@ export function RoadmapLibrary() {
   return (
     <main className="min-h-screen text-[var(--fg)]">
       <div className="relative overflow-hidden border-b border-[var(--border)]">
-        <div className="absolute inset-0 bg-grid-pattern opacity-40" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-25" />
         <div
           className="absolute inset-0"
           style={{
             backgroundImage:
-              'radial-gradient(circle at 8% 18%, rgba(15, 118, 110, 0.18), transparent 45%), radial-gradient(circle at 92% 22%, rgba(251, 146, 60, 0.18), transparent 45%)',
+              'radial-gradient(circle at 8% 18%, rgba(20, 184, 166, 0.18), transparent 45%), radial-gradient(circle at 92% 22%, rgba(249, 115, 22, 0.14), transparent 45%)',
           }}
         />
         <div className="relative max-w-6xl mx-auto px-6 py-12">
@@ -109,7 +109,7 @@ export function RoadmapLibrary() {
                 Soddalashtirilgan, tartibli va ketma-ket darslar kutubxonasi
               </h1>
               <p className="text-base text-[var(--muted)] max-w-2xl">
-                Har bir mavzu bo'yicha darslar alohida bo'limda turadi, kunlar esa ketma-ket tartibda joylashgan. Qidiruv,
+                Har bir mavzu bo&apos;yicha darslar alohida bo&apos;limda turadi, kunlar esa ketma-ket tartibda joylashgan. Qidiruv,
                 filter va tezkor preview bilan kerakli bosqichni tez topasiz.
               </p>
               <div className="flex flex-wrap gap-3 text-sm">
@@ -129,12 +129,12 @@ export function RoadmapLibrary() {
                 </button>
               </div>
             </div>
-            <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_30px_60px_rgba(28,26,22,0.12)]">
+            <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_30px_60px_rgba(0,0,0,0.45)]">
               <div className="flex items-center justify-between text-sm text-[var(--muted)]">
                 <span>Umumiy progress</span>
                 <span className="text-[var(--fg)] font-semibold">{progressPercent}%</span>
               </div>
-              <div className="mt-3 h-3 rounded-full bg-black/5 overflow-hidden">
+              <div className="mt-3 h-3 rounded-full bg-[var(--surface-muted)] overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${progressPercent}%` }}
@@ -143,15 +143,15 @@ export function RoadmapLibrary() {
                 />
               </div>
               <div className="mt-5 grid grid-cols-3 gap-3 text-sm">
-                <div className="rounded-2xl border border-[var(--border)] bg-white/60 p-3">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)] p-3">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]">Tugadi</p>
                   <p className="text-lg font-semibold">{completedCount}</p>
                 </div>
-                <div className="rounded-2xl border border-[var(--border)] bg-white/60 p-3">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)] p-3">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]">Ochiq</p>
                   <p className="text-lg font-semibold">{unlockedCount}</p>
                 </div>
-                <div className="rounded-2xl border border-[var(--border)] bg-white/60 p-3">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)] p-3">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]">Jami</p>
                   <p className="text-lg font-semibold">{totalStages}</p>
                 </div>
@@ -177,7 +177,7 @@ export function RoadmapLibrary() {
                   className={cn(
                     'rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition',
                     activeFilter === filter.id
-                      ? 'bg-[var(--accent)] text-white shadow-[0_10px_20px_rgba(15,118,110,0.2)]'
+                      ? 'bg-[var(--accent)] text-white shadow-[0_10px_20px_rgba(20,184,166,0.25)]'
                       : 'text-[var(--muted)] hover:text-[var(--fg)]'
                   )}
                 >
@@ -192,7 +192,7 @@ export function RoadmapLibrary() {
       <div className="max-w-6xl mx-auto px-6 py-12 grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
           <div className="sticky top-10 space-y-4">
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--muted)]">Bo'limlar</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--muted)]">Bo&apos;limlar</p>
             <nav className="space-y-2">
               {groups.map(({ island, allCount, completedCount: islandCompleted }) => (
                 <a
@@ -214,7 +214,7 @@ export function RoadmapLibrary() {
               key={island.id}
               id={island.id}
               variants={itemVariants}
-              className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_18px_40px_rgba(28,26,22,0.08)]"
+              className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
             >
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -223,7 +223,7 @@ export function RoadmapLibrary() {
                 </div>
                 <div className="flex items-center gap-3 text-sm text-[var(--muted)]">
                   <span>{islandCompleted}/{allCount} tugallangan</span>
-                  <div className="h-2 w-32 rounded-full bg-black/5 overflow-hidden">
+                  <div className="h-2 w-32 rounded-full bg-[var(--surface-muted)] overflow-hidden">
                     <div
                       className="h-full bg-[var(--accent)]"
                       style={{ width: `${Math.round((islandCompleted / allCount) * 100)}%` }}
@@ -243,16 +243,16 @@ export function RoadmapLibrary() {
                   return (
                     <div
                       key={stage.id}
-                      className="group rounded-2xl border border-[var(--border)] bg-white/70 p-4 transition hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(28,26,22,0.12)]"
+                      className="group rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)] p-4 transition hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(0,0,0,0.5)]"
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Day {stage.dayNumber}</span>
                         <span
                           className={cn(
                             'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.2em]',
-                            status === 'completed' && 'border-emerald-200 bg-emerald-50 text-emerald-700',
-                            status === 'unlocked' && 'border-teal-200 bg-teal-50 text-teal-700',
-                            status === 'locked' && 'border-stone-200 bg-stone-100 text-stone-500'
+                            status === 'completed' && 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+                            status === 'unlocked' && 'border-teal-500/30 bg-teal-500/10 text-teal-300',
+                            status === 'locked' && 'border-slate-700 bg-slate-900/60 text-slate-400'
                           )}
                         >
                           {status === 'completed' && <CheckCircle2 className="w-3 h-3" />}

@@ -1,13 +1,12 @@
 'use client';
 
-import { roadmapData } from '@/data/roadmapData';
 import { StageData } from '@/types/roadmap';
 import { useProgressStore } from '@/store/progressStore';
 import { Check, Lock, Play } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 
-export function StageNode({ stage, islandHue, dynamicX, dynamicY }: { stage: StageData, islandHue?: string, dynamicX?: number, dynamicY?: number }) {
+export function StageNode({ stage, dynamicX, dynamicY }: { stage: StageData, dynamicX?: number, dynamicY?: number }) {
   const { isCompleted, isUnlocked, selectedStageId, setSelectedStageId } = useProgressStore();
   const completed = isCompleted(stage.id);
   const unlocked = isUnlocked(stage.id);

@@ -20,26 +20,28 @@
 
 @layer base {
   :root {
-    --background: #f7f2e8;
-    --foreground: #1c1a16;
-    --bg: #f7f2e8;
-    --fg: #1c1a16;
-    --muted: #6f665c;
-    --accent: #0f766e;
-    --danger: #b91c1c;
-    --border: rgba(28, 26, 22, 0.12);
-    --surface: #fffaf2;
-    --glow-violet: rgba(39, 56, 96, 0.18);
-    --glow-cyan: rgba(18, 116, 128, 0.15);
+    --background: #0b0f14;
+    --foreground: #f5efe6;
+    --bg: #0b0f14;
+    --fg: #f5efe6;
+    --muted: #9c948a;
+    --accent: #14b8a6;
+    --danger: #f87171;
+    --border: rgba(245, 239, 230, 0.14);
+    --surface: #121821;
+    --surface-elevated: #1a2230;
+    --surface-muted: #0f141c;
+    --glow-violet: rgba(99, 102, 241, 0.2);
+    --glow-cyan: rgba(20, 184, 166, 0.2);
   }
 
   body {
     background-color: var(--bg);
     color: var(--fg);
     background-image:
-      radial-gradient(circle at 12% 18%, rgba(255, 217, 145, 0.35), transparent 45%),
-      radial-gradient(circle at 84% 12%, rgba(127, 212, 199, 0.28), transparent 40%),
-      linear-gradient(180deg, rgba(255, 250, 242, 0.9), rgba(242, 236, 226, 0.95));
+      radial-gradient(circle at 12% 18%, rgba(20, 184, 166, 0.22), transparent 45%),
+      radial-gradient(circle at 88% 10%, rgba(249, 115, 22, 0.18), transparent 40%),
+      linear-gradient(180deg, #0b0f14 0%, #0d131b 100%);
     background-attachment: fixed;
     margin: 0;
     padding: 0;
@@ -50,16 +52,16 @@
 
 .bg-grid-pattern {
   background-size: 48px 48px;
-  background-image: linear-gradient(to right, rgba(28, 26, 22, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 26, 22, 0.06) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(245, 239, 230, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 239, 230, 0.06) 1px, transparent 1px);
 }
 
 .glass-panel {
-  background: rgba(255, 250, 242, 0.8);
+  background: rgba(16, 21, 30, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(28, 26, 22, 0.12);
-  box-shadow: 0 4px 30px rgba(28, 26, 22, 0.08);
+  border: 1px solid rgba(245, 239, 230, 0.12);
+  box-shadow: 0 4px 30px rgba(5, 7, 10, 0.5);
 }
 
 .font-display {

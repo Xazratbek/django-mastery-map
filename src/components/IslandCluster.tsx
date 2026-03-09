@@ -128,7 +128,6 @@ export function IslandCluster({ island }: { island: IslandData }) {
           <StageNode
              key={stage.id}
              stage={stage}
-             islandHue={island.color}
              dynamicX={dynamicX}
              dynamicY={dynamicY}
           />
